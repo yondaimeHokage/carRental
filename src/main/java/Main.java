@@ -1,6 +1,7 @@
 import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -10,13 +11,21 @@ public class Main {
 
     public static void main(String[] args) {
 
+        System.out.println("Welcome to CarRental Service");
+
         Database instance = Database.getInstance();
         instance.startDatabaseServer();
-//        Connection connection = Database.getInstance().createConnection();
+        try{
+            instance.setupDb();
+        } catch (SQLException e) {
+            System.out.println("UNABLE to SetUpDatabase");
+            return;
+        }
+
+
         Scanner sc = new Scanner(System.in);
         Reservation reserve = Reservation.getInstance();
         Boolean flag = true;
-        System.out.println("Welcome to CarRental Service");
 
 
         while(flag){

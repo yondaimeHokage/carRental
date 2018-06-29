@@ -3,6 +3,7 @@ import org.hsqldb.Server;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Logger;
 
 /**
@@ -16,6 +17,29 @@ public class Database {
     public static final String USER = "SA";
     public static final String PASSWORD = "";
     private static final Database instance = new Database();
+    public static final String CREATE_CAR_TABLE = "CREATE TABLE CAR (\n" +
+            "   id VARCHAR(10) NOT NULL,\n" +
+            "   type VARCHAR(50) NOT NULL,\n" +
+            "   model VARCHAR(20),\n" +
+            "   noOfPass INT,\n" +
+            "   PRIMARY KEY (id) \n" +
+            ");";
+    public static final String CREATE_RESERVATION_TABLE = "CREATE TABLE RESERVATION (\n" +
+            "   rid VARCHAR(10) NOT NULL,\n" +
+            "   cid VARCHAR(10) NOT NULL,\n" +
+            "   startDateTime VARCHAR(25) NOT NULL,\n" +
+            "   endDateTime VARCHAR(25) NOT NULL,\n" +
+            "   cost LONG,\n" +
+            "   status VARCHAR(10) NOT NULL,\n" +
+            "   PRIMARY KEY (rid) \n" +
+            ");";
+    public static final String CREATE_CUTOMER_TABLE = "CREATE TABLE CUSTOMER (\n" +
+            "   pid VARCHAR(10) NOT NULL,\n" +
+            "   age VARCHAR(3) NOT NULL,\n" +
+            "   licenseState VARCHAR(20),\n" +
+            "   licensceNumber VARCHAR(20) NOT NULL,\n" +
+            "   PRIMARY KEY (pid) \n" +
+            ");";
 
     private static Server hsqlServer;
 
@@ -61,4 +85,48 @@ public class Database {
         return connection;
     }
 
+    public void setupDb() throws SQLException {
+        setUpCarTable();
+        SetUpReservationTable();
+        setUpCustomerTable();
+    }
+
+    private void setUpCustomerTable() throws SQLException {
+        try(Connection connection = instance.createConnection()){
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(CREATE_CUTOMER_TABLE);
+
+        } catch (SQLException e){
+            log.severe("Unable to setup Customer table");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    private void SetUpReservationTable() throws SQLException {
+        try(Connection connection = instance.createConnection()){
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(CREATE_RESERVATION_TABLE);
+
+        } catch (SQLException e){
+            log.severe("Unable to setup Reservation table");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    private void setUpCarTable() throws SQLException {
+        try(Connection connection = instance.createConnection()){
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(CREATE_CAR_TABLE);
+
+        } catch (SQLException e){
+            log.severe("Unable to setup Car table");
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

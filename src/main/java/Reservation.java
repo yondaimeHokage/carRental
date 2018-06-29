@@ -139,10 +139,24 @@ public class Reservation {
     }
 
     public void modify() {
+    /*
 
+    * Ask for resevation id to be modified.
+    * Retrieve booking details for given id.
+    * get other reservations for this exact carid and see if new time avilable.
+    * if yess approve it.
+    * else find other car with same type for same time if avilable
+    * if found update this reservation to cancelled and create new one with new id
+    * else reject and provide no car avilable
+     * */
     }
 
     public void delete() {
+
+        /*
+        * Ask for reservation id
+        * find it and change status to cancelled.
+        * return success.*/
 
     }
 }
