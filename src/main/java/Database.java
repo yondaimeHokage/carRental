@@ -1,9 +1,6 @@
 import org.hsqldb.Server;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.logging.Logger;
 
 /**
@@ -29,11 +26,11 @@ public class Database {
             "   cid VARCHAR(10) NOT NULL,\n" +
             "   startDateTime VARCHAR(25) NOT NULL,\n" +
             "   endDateTime VARCHAR(25) NOT NULL,\n" +
-            "   cost LONG,\n" +
+            "   costperday VARCHAR(4),\n" +
             "   status VARCHAR(10) NOT NULL,\n" +
             "   PRIMARY KEY (rid) \n" +
             ");";
-    public static final String CREATE_CUTOMER_TABLE = "CREATE TABLE CUSTOMER (\n" +
+    public static final String CREATE_CUSTOMER_TABLE = "CREATE TABLE CUSTOMER (\n" +
             "   pid VARCHAR(10) NOT NULL,\n" +
             "   age VARCHAR(3) NOT NULL,\n" +
             "   licenseState VARCHAR(20),\n" +
@@ -66,6 +63,13 @@ public class Database {
         hsqlServer.start();
     }
 
+    public void stopDatabaseServer() {
+        if (hsqlServer == null) {
+            return;
+        }
+        hsqlServer.stop();
+    }
+
     public Connection createConnection() {
         Connection connection = null;
         try {
@@ -94,8 +98,12 @@ public class Database {
     private void setUpCustomerTable() throws SQLException {
         try(Connection connection = instance.createConnection()){
 
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet r =  metaData.getTables(null,null,"CUSTOMER", null);
+            if(r.next())
+                return;
             Statement statement = connection.createStatement();
-            statement.executeUpdate(CREATE_CUTOMER_TABLE);
+            statement.executeUpdate(CREATE_CUSTOMER_TABLE);
 
         } catch (SQLException e){
             log.severe("Unable to setup Customer table");
@@ -107,6 +115,10 @@ public class Database {
     private void SetUpReservationTable() throws SQLException {
         try(Connection connection = instance.createConnection()){
 
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet r =  metaData.getTables(null,null,"RESERVATION", null);
+            if(r.next())
+                return;
             Statement statement = connection.createStatement();
             statement.executeUpdate(CREATE_RESERVATION_TABLE);
 
@@ -120,6 +132,10 @@ public class Database {
     private void setUpCarTable() throws SQLException {
         try(Connection connection = instance.createConnection()){
 
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet r =  metaData.getTables(null,null,"CAR", null);
+            if(r.next())
+                return;
             Statement statement = connection.createStatement();
             statement.executeUpdate(CREATE_CAR_TABLE);
 

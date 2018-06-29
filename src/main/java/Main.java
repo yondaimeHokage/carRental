@@ -1,6 +1,3 @@
-import com.sun.org.apache.xpath.internal.SourceTree;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -35,6 +32,7 @@ public class Main {
             System.out.println("Enter 4 to EXIT CarRental");
             System.out.print("Your Entry : ");
             int option = sc.nextInt();
+            System.out.println("option = " + option);
             switch (option) {
                 case 1:
                     reserve.createNew();
@@ -54,5 +52,7 @@ public class Main {
             }
         }
 
+        instance.stopDatabaseServer();
+        System.out.println("THANK YOU FOR USING CAR_RENTAL SERVICE");
     }
 }
